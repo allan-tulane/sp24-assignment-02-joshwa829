@@ -46,9 +46,25 @@ def pad(x,y):
 
 
 def subquadratic_multiply(x, y):
-    ### TODO
-    pass
-    ###
+  # base case
+  if x.decimal_val < 10 or y.decimal_val < 10:
+      return x.decimal_val * y.decimal_val 
+
+  # calculates the size of numbers
+  size = max(len(x.binary_vec), len(y.binary_vec))
+  m = size // 2
+
+  # splits the binary numbers in the middle
+  high1, low1 = split_number(x.binary_vec)
+  high2, low2 = split_number(y.binary_vec)
+
+  # recursive multiplication calls
+  SM0 = subquadratic_multiply(low1, low2)
+  SM1 = subquadratic_multiply(BinaryNumber(low1.decimal_val + high1.decimal_val), BinaryNumber(low2.decimal_val + high2.decimal_val))
+  SM2 = subquadratic_multiply(high1, high2)
+
+  # combines results
+  return SM2 * 2**(2*m) + ((SM1 - SM2 - SM0) * 2**m) + SM0
 
 
 
